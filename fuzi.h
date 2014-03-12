@@ -40,6 +40,7 @@ private:
     }
 
 public:
+    // Default constructor and operator= and ctor(&) needed for std::map
     Fuzi() {}
     Fuzi(FuziBuilder const& builder)
         : functions_(builder.get().size())
@@ -52,12 +53,16 @@ public:
         std::for_each(functions_.begin(), functions_.end(), deleter);
     }
 
+    // Move constructor. In C++11 wthere would actually be just the
+    //     move constructor and this would be private
     Fuzi(Fuzi const& other)
     {
         functions_ = other.functions_;
         const_cast<Fuzi&>(other).functions_.clear();
     }
 
+    // Move behaviour. other will no longer contain any data after this
+    //     function returns
     Fuzi& operator=(Fuzi& other)
     {
         functions_ = other.functions_;
@@ -90,6 +95,7 @@ private:
     };
 
 public:
+    // Compute results for all parameters in point u
     NamedResults operator()(float const u)
     {
         NamedResults ret(functions_.size());

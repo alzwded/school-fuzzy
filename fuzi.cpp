@@ -20,18 +20,26 @@ typedef std::map<std::string, Fuzi> NamedFuzis;
 NamedFuzis InitFuzi()
 {
     FuziBuilder xBuilder;
-    LeftSaturationParameters xNEParameters = { -1.f, -.5f };
-    TrapeziumParameters xZEParameters = { -1.f, -.5f, .5f, 1.f };
-    RightSaturationParameters xPOParameters = { .5f, 1.f };
-    xBuilder << NamedVariable("NE", NewFunction(xNEParameters))
+    LeftSaturationParameters
+        xNEParameters = { -1.f, -.5f };
+    TrapeziumParameters
+        xZEParameters = { -1.f, -.5f, .5f, 1.f };
+    RightSaturationParameters
+        xPOParameters = { .5f, 1.f };
+    xBuilder
+        << NamedVariable("NE", NewFunction(xNEParameters))
         << NamedVariable("ZE", NewFunction(xZEParameters))
         << NamedVariable("PO", NewFunction(xPOParameters));
 
     FuziBuilder dxBuilder;
-    LeftSaturationParameters dxNEParameters = { -.5f, -.25f };
-    TriangleParameters dxZEParameters = { -.5f, 0.f, .5f };
-    RightSaturationParameters dxPOParameters = { .25f, .5f };
-    dxBuilder << NamedVariable("NE", NewFunction(dxNEParameters))
+    LeftSaturationParameters
+        dxNEParameters = { -.5f, -.25f };
+    TriangleParameters
+        dxZEParameters = { -.5f, 0.f, .5f };
+    RightSaturationParameters
+        dxPOParameters = { .25f, .5f };
+    dxBuilder
+        << NamedVariable("NE", NewFunction(dxNEParameters))
         << NamedVariable("ZE", NewFunction(dxZEParameters))
         << NamedVariable("PO", NewFunction(dxPOParameters));
 
