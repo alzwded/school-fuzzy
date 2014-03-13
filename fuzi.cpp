@@ -49,13 +49,7 @@ NamedFuzis InitFuzi()
     return ret;
 }
 
-void printNamedResults(Fuzi::NamedResults const& r)
-{
-    for(size_t i = 0; i < r.size(); ++i)
-        printf("%s = %-7.2f", r[i].first.c_str(), r[i].second);
-}
-
-void printResults(FuzifiedValues const& values)
+static void printResults(FuzifiedValues const& values)
 {
     for(FuzifiedValues::const_iterator i = values.begin();
             i != values.end(); ++i)
@@ -68,6 +62,13 @@ void printResults(FuzifiedValues const& values)
         }
         printf("\n");
     }
+}
+
+#ifdef TESTS
+static void printNamedResults(Fuzi::NamedResults const& r)
+{
+    for(size_t i = 0; i < r.size(); ++i)
+        printf("%s = %-7.2f", r[i].first.c_str(), r[i].second);
 }
 
 void test1()
@@ -85,13 +86,16 @@ void test1()
     printNamedResults(dxResults);
     printf("\n");
 }
+#endif
 
 
 int main(
         int argc,
         char* argv[])
 {
+#ifdef TESTS
     test1();
+#endif
 
     NamedInput input;
     input.insert(std::make_pair<std::string, float>("x", .6f));
