@@ -81,20 +81,16 @@ public:
 private:
     struct Generator {
         float const u_;
-        arrayOfFuncs::const_iterator i_;
 
-        Generator(arrayOfFuncs::const_iterator i, float const u)
+        Generator(float const u)
             : u_(u)
-            , i_(i) 
         {}
 
-        NamedResult operator()()
+        NamedResult operator()(arrayOfFuncs::value_type const& i) const
         {
-            NamedResult ret(
-                    i_->first,
-                    (*i_->second)(u_));
-            ++i_;
-            return ret;
+            return NamedResult(
+                    i.first,
+                    (*i.second)(u_));
         }
     };
 
@@ -103,8 +99,7 @@ public:
     NamedResults operator()(float const u) const
     {
         NamedResults ret(functions_.size());
-        Generator gen(functions_.begin(), u);
-        std::generate(ret.begin(), ret.end(), gen);
+        std::transform(functions_.begin(), functions_.end(), ret.begin(), Generator(u));
         return ret;
     }
 };

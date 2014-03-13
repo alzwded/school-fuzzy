@@ -7,6 +7,7 @@
 
 #include <map>
 #include <string>
+#include <limits>
 
 #include "functions.hpp"
 #include "fuzi.hxx"
@@ -22,21 +23,18 @@ class FuzificationProblem
     struct Computer
     {
         FuzificationProblem const& self_;
-        FuzifiedValues& out_;
 
-        Computer(
-                FuzificationProblem const& pb,
-                FuzifiedValues& out)
+        Computer(FuzificationProblem const& pb)
             : self_(pb)
-            , out_(out)
         {}
 
-        void operator()(NamedInput::value_type const& v) const
+        FuzifiedValues::value_type operator()(NamedInput::value_type const& v) const
         {
             NamedFuzis::const_iterator found = self_.fuzis_.find(v.first);
             if(found != self_.fuzis_.end()) {
-                out_.insert(std::make_pair(v.first, (found->second)(v.second)));
+                return FuzifiedValues::value_type(v.first, (found->second)(v.second));
             }
+            return std::make_pair(v.first, FuzifiedValues::value_type::second_type());
         }
     };
 public:
@@ -47,8 +45,7 @@ public:
     FuzifiedValues operator()(NamedInput const& input)
     {
         FuzifiedValues ret;
-        Computer pred(*this, ret);
-        std::for_each(input.begin(), input.end(), pred);
+        std::transform(input.begin(), input.end(), std::inserter(ret, ret.begin()), Computer(*this));
         return ret;
     }
 };
