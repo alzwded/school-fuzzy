@@ -96,7 +96,7 @@ private:
 
 public:
     // Compute results for all parameters in point u
-    NamedResults operator()(float const u)
+    NamedResults operator()(float const u) const
     {
         NamedResults ret(functions_.size());
         Generator gen(functions_.begin(), u);

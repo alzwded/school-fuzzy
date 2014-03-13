@@ -11,11 +11,10 @@
 #include <string>
 
 #include "functions.hpp"
-#include "fuzi.h"
+#include "fuzi.hxx"
+#include "fuzification.hxx"
 
 // main logic
-
-typedef std::map<std::string, Fuzi> NamedFuzis;
 
 NamedFuzis InitFuzi()
 {
@@ -56,6 +55,21 @@ void printNamedResults(Fuzi::NamedResults const& r)
         printf("%s = %-7.2f", r[i].first.c_str(), r[i].second);
 }
 
+void printResults(FuzifiedValues const& values)
+{
+    for(FuzifiedValues::const_iterator i = values.begin();
+            i != values.end(); ++i)
+    {
+        printf("%s:\n\t", i->first.c_str());
+        for(size_t idx = 0; idx < i->second.size(); ++idx) {
+            printf("%s = %-7.2f",
+                    i->second[idx].first.c_str(),
+                    i->second[idx].second);
+        }
+        printf("\n");
+    }
+}
+
 int main(
         int argc,
         char* argv[])
@@ -72,6 +86,14 @@ int main(
     printf("dx: ");
     printNamedResults(dxResults);
     printf("\n");
+
+    NamedInput input;
+    input.insert(std::make_pair<std::string, float>("x", .6f));
+    input.insert(std::make_pair<std::string, float>("dx", -.4f));
+
+    FuzificationProblem pb(fuzis);
+    FuzifiedValues results = pb(input);
+    printResults(results);
 
     return 0;
 }
