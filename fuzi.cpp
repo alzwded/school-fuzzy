@@ -43,8 +43,8 @@ NamedFuzis InitFuzi()
         << NamedVariable("PO", NewFunction(dxPODefinition));
 
     NamedFuzis ret;
-    ret.insert(std::make_pair(std::string("x"), Fuzi(xBuilder)));
-    ret.insert(std::make_pair(std::string("dx"), Fuzi(dxBuilder)));
+    ret.insert(NamedFuzis::value_type("x", Fuzi(xBuilder)));
+    ret.insert(NamedFuzis::value_type("dx", Fuzi(dxBuilder)));
 
     return ret;
 }
