@@ -21,8 +21,8 @@ class FuzificationProblem
 
     struct Computer
     {
-        FuzifiedValues& out_;
         FuzificationProblem const& self_;
+        FuzifiedValues& out_;
 
         Computer(
                 FuzificationProblem const& pb,
