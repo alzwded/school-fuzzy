@@ -70,9 +70,7 @@ void printResults(FuzifiedValues const& values)
     }
 }
 
-int main(
-        int argc,
-        char* argv[])
+void test1()
 {
     NamedFuzis fuzis = InitFuzi();
 
@@ -86,11 +84,20 @@ int main(
     printf("dx: ");
     printNamedResults(dxResults);
     printf("\n");
+}
+
+
+int main(
+        int argc,
+        char* argv[])
+{
+    test1();
 
     NamedInput input;
     input.insert(std::make_pair<std::string, float>("x", .6f));
     input.insert(std::make_pair<std::string, float>("dx", -.4f));
 
+    NamedFuzis fuzis = InitFuzi();
     FuzificationProblem pb(fuzis);
     FuzifiedValues results = pb(input);
     printResults(results);
