@@ -1,3 +1,7 @@
+// Author: Vlad Mesco
+// Date: Thu Mar 13 18:47:41 EET 2014
+// Description: Fuzzyfication
+
 #ifndef FUZIFICATION_H
 #define FUZIFICATION_H
 

@@ -1,3 +1,7 @@
+// Author: Vlad Mesco
+// Date: Wed Mar 12 21:46:09 EET 2014
+// Description: Fuzzy Saturation Functions
+
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
 

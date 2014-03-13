@@ -1,3 +1,7 @@
+// Author: Vlad Mesco
+// Date: Wed Mar 12 21:46:09 EET 2014
+// Description: Fuzzy functions
+
 #ifndef FUZI_H
 #define FUZI_H
 
