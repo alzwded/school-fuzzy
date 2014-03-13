@@ -51,13 +51,13 @@ public:
 };
 
 #define FUZI_INPUT(NAME) \
-    NamedInput NAME; if(1) { \
+    NamedInput NAME; do { \
         NamedInput& FUZI_input = NAME;
 
 #define FUZI_INPUT_(X, V) \
         FUZI_input.insert(NamedInput::value_type((X), (V)));
 
 #define FUZI_INPUT_END \
-    } do{}while(0)
+    } while(0)
 
 #endif
