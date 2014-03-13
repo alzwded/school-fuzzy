@@ -97,13 +97,14 @@ int main(
     test1();
 #endif
 
+    NamedFuzis fuzis = InitFuzi();
+    FuzificationProblem pb(fuzis);
+
     FUZI_INPUT(input)
         FUZI_INPUT_("x", .6f)
         FUZI_INPUT_("dx", -.4f)
     FUZI_INPUT_END;
 
-    NamedFuzis fuzis = InitFuzi();
-    FuzificationProblem pb(fuzis);
     FuzifiedValues results = pb(input);
     printResults(results);
 
