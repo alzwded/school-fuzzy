@@ -19,28 +19,28 @@
 NamedFuzis InitFuzi()
 {
     FuziBuilder xBuilder;
-    LeftSaturationParameters
-        xNEParameters = { -1.f, -.5f };
-    TrapeziumParameters
-        xZEParameters = { -1.f, -.5f, .5f, 1.f };
-    RightSaturationParameters
-        xPOParameters = { .5f, 1.f };
+    LeftSaturationDefinition
+        xNEDefinition = { -1.f, -.5f };
+    TrapeziumDefinition
+        xZEDefinition = { -1.f, -.5f, .5f, 1.f };
+    RightSaturationDefinition
+        xPODefinition = { .5f, 1.f };
     xBuilder
-        << NamedVariable("NE", NewFunction(xNEParameters))
-        << NamedVariable("ZE", NewFunction(xZEParameters))
-        << NamedVariable("PO", NewFunction(xPOParameters));
+        << NamedVariable("NE", NewFunction(xNEDefinition))
+        << NamedVariable("ZE", NewFunction(xZEDefinition))
+        << NamedVariable("PO", NewFunction(xPODefinition));
 
     FuziBuilder dxBuilder;
-    LeftSaturationParameters
-        dxNEParameters = { -.5f, -.25f };
-    TriangleParameters
-        dxZEParameters = { -.5f, 0.f, .5f };
-    RightSaturationParameters
-        dxPOParameters = { .25f, .5f };
+    LeftSaturationDefinition
+        dxNEDefinition = { -.5f, -.25f };
+    TriangleDefinition
+        dxZEDefinition = { -.5f, 0.f, .5f };
+    RightSaturationDefinition
+        dxPODefinition = { .25f, .5f };
     dxBuilder
-        << NamedVariable("NE", NewFunction(dxNEParameters))
-        << NamedVariable("ZE", NewFunction(dxZEParameters))
-        << NamedVariable("PO", NewFunction(dxPOParameters));
+        << NamedVariable("NE", NewFunction(dxNEDefinition))
+        << NamedVariable("ZE", NewFunction(dxZEDefinition))
+        << NamedVariable("PO", NewFunction(dxPODefinition));
 
     NamedFuzis ret;
     ret.insert(std::make_pair(std::string("x"), Fuzi(xBuilder)));

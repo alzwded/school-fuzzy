@@ -21,12 +21,12 @@ NewFunction(
 // LeftSaturation
 typedef struct {
     float a, b;
-} LeftSaturationParameters;
+} LeftSaturationDefinition;
 
 template<>
 IFuzzyFunction* const
 NewFunction(
-        LeftSaturationParameters const&);
+        LeftSaturationDefinition const&);
 class LeftSaturation
 : public IFuzzyFunction
 {
@@ -38,7 +38,7 @@ class LeftSaturation
         : a_(a)
         , b_(b)
     {}
-    friend IFuzzyFunction* const NewFunction<LeftSaturationParameters>(LeftSaturationParameters const&);
+    friend IFuzzyFunction* const NewFunction<LeftSaturationDefinition>(LeftSaturationDefinition const&);
 
 public:
     virtual float operator()(float const u) const
@@ -52,7 +52,7 @@ public:
 template<>
 IFuzzyFunction* const
 NewFunction(
-        LeftSaturationParameters const& parameters)
+        LeftSaturationDefinition const& parameters)
 {
     return new LeftSaturation(
                 parameters.a,
@@ -62,12 +62,12 @@ NewFunction(
 // Right Saturation
 typedef struct {
     float a, b;
-} RightSaturationParameters;
+} RightSaturationDefinition;
 
 template<>
 IFuzzyFunction* const
 NewFunction(
-        RightSaturationParameters const&);
+        RightSaturationDefinition const&);
 class RightSaturation
 : public IFuzzyFunction
 {
@@ -79,7 +79,7 @@ class RightSaturation
         : a_(a)
         , b_(b)
     {}
-    friend IFuzzyFunction* const NewFunction<RightSaturationParameters>(RightSaturationParameters const&);
+    friend IFuzzyFunction* const NewFunction<RightSaturationDefinition>(RightSaturationDefinition const&);
 
 public:
     virtual float operator()(float const u) const
@@ -93,7 +93,7 @@ public:
 template<>
 IFuzzyFunction* const
 NewFunction(
-        RightSaturationParameters const& parameters)
+        RightSaturationDefinition const& parameters)
 {
     return new RightSaturation(
                 parameters.a,
@@ -103,12 +103,12 @@ NewFunction(
 // Triangle
 typedef struct {
     float a, b, c;
-} TriangleParameters;
+} TriangleDefinition;
 
 template<>
 IFuzzyFunction* const
 NewFunction(
-        TriangleParameters const&);
+        TriangleDefinition const&);
 class Triangle
 : public IFuzzyFunction
 {
@@ -122,7 +122,7 @@ class Triangle
         , b_(b)
         , c_(c)
     {}
-    friend IFuzzyFunction* const NewFunction<TriangleParameters>(TriangleParameters const&);
+    friend IFuzzyFunction* const NewFunction<TriangleDefinition>(TriangleDefinition const&);
 
 public:
     virtual float operator()(float const u) const
@@ -137,7 +137,7 @@ public:
 template<>
 IFuzzyFunction* const
 NewFunction(
-        TriangleParameters const& parameters)
+        TriangleDefinition const& parameters)
 {
     return new Triangle(
                 parameters.a,
@@ -148,12 +148,12 @@ NewFunction(
 // Trapezium
 typedef struct {
     float a, b, c, d;
-} TrapeziumParameters;
+} TrapeziumDefinition;
 
 template<>
 IFuzzyFunction* const
 NewFunction(
-        TrapeziumParameters const&);
+        TrapeziumDefinition const&);
 class Trapezium
 : public IFuzzyFunction
 {
@@ -169,7 +169,7 @@ class Trapezium
         , c_(c)
         , d_(d)
     {}
-    friend IFuzzyFunction* const NewFunction<TrapeziumParameters>(TrapeziumParameters const&);
+    friend IFuzzyFunction* const NewFunction<TrapeziumDefinition>(TrapeziumDefinition const&);
 
 public:
     virtual float operator()(float const u) const
@@ -185,7 +185,7 @@ public:
 template<>
 IFuzzyFunction* const
 NewFunction(
-        TrapeziumParameters const& parameters)
+        TrapeziumDefinition const& parameters)
 {
     return new Trapezium(
                 parameters.a,
