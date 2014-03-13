@@ -24,7 +24,7 @@ class FuzificationProblem
     {
         FuzificationProblem const& self_;
 
-        Computer(FuzificationProblem const& pb)
+        explicit Computer(FuzificationProblem const& pb)
             : self_(pb)
         {}
 

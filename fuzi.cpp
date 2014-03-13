@@ -46,6 +46,11 @@ NamedFuzis InitFuzi()
     ret.insert(NamedFuzis::value_type("x", Fuzi(xBuilder)));
     ret.insert(NamedFuzis::value_type("dx", Fuzi(dxBuilder)));
 
+    ret.insert(
+            NamedFuzis::value_type("t", FuziBuilder()
+                    << NamedVariable("a", NewFunction(dxPODefinition))
+                    << NamedVariable("b", NewFunction(xPODefinition))));
+
     return ret;
 }
 
@@ -78,6 +83,10 @@ void test1()
     Fuzi::NamedResults xResults = fuzis["x"](0.6f);
     Fuzi::NamedResults dxResults = fuzis["dx"](-0.4f);
 
+    printf(" t: ");
+    printNamedResults(fuzis["t"](0.7f));
+    printf("\n");
+
     printf(" x: ");
     printNamedResults(xResults);
     printf("\n");
@@ -97,14 +106,13 @@ int main(
 #endif
 
     NamedFuzis fuzis = InitFuzi();
-    FuzificationProblem pb(fuzis);
 
     FUZI_INPUT(input)
         FUZI_INPUT_("x", .6f)
         FUZI_INPUT_("dx", -.4f)
     FUZI_INPUT_END;
 
-    FuzifiedValues results = pb(input);
+    FuzifiedValues results = FuzificationProblem(fuzis)(input);
     printResults(results);
 
     return 0;

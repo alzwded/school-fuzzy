@@ -82,7 +82,7 @@ private:
     struct Generator {
         float const u_;
 
-        Generator(float const u)
+        explicit Generator(float const u)
             : u_(u)
         {}
 
