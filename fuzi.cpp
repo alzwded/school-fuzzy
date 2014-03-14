@@ -46,10 +46,12 @@ NamedFuzis InitFuzi()
     ret.insert(NamedFuzis::value_type("x", Fuzi(xBuilder)));
     ret.insert(NamedFuzis::value_type("dx", Fuzi(dxBuilder)));
 
+#ifdef TESTS
     ret.insert(
             NamedFuzis::value_type("t", FuziBuilder()
                     << NamedVariable("a", NewFunction(dxPODefinition))
                     << NamedVariable("b", NewFunction(xPODefinition))));
+#endif
 
     return ret;
 }
