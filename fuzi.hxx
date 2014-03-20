@@ -75,8 +75,8 @@ public:
     }
 
 public:
-    typedef std::pair<std::string, float> NamedResult;
-    typedef std::vector<NamedResult> NamedResults;
+    typedef std::map<std::string, float> NamedResults;
+    typedef NamedResults::value_type NamedResult;
 
 private:
     struct Generator {
@@ -98,8 +98,8 @@ public:
     // Compute results for all parameters in point u
     NamedResults operator()(float const u) const
     {
-        NamedResults ret(functions_.size());
-        std::transform(functions_.begin(), functions_.end(), ret.begin(), Generator(u));
+        NamedResults ret;
+        std::transform(functions_.begin(), functions_.end(), std::inserter(ret, ret.begin()), Generator(u));
         return ret;
     }
 };

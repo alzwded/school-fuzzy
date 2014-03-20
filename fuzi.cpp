@@ -62,10 +62,12 @@ static void printResults(FuzifiedValues const& values)
             i != values.end(); ++i)
     {
         printf("%s:\n\t", i->first.c_str());
-        for(size_t idx = 0; idx < i->second.size(); ++idx) {
+        for(Fuzi::NamedResults::const_iterator j = i->second.begin();
+                j != i->second.end(); ++j)
+        {
             printf("%s = %-7.2f",
-                    i->second[idx].first.c_str(),
-                    i->second[idx].second);
+                    j->first.c_str(),
+                    j->second);
         }
         printf("\n");
     }
