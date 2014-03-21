@@ -12,7 +12,9 @@
 #include "functions.hpp"
 #include "fuzi.hxx"
 #include "fuzification.hxx"
-#include "multidimarray.hpp"
+#include "multidimmatrix.hpp"
+#include "composition.hxx"
+#include "inference.hxx"
 
 // main logic
 
@@ -166,52 +168,6 @@ static void printInferenceMatrix(
     }
 }
 
-static FloatMatrix computeInferenceMatrix(FuzifiedValues& results)
-{
-    FloatMatrix inferenceMatrix;
-
-    FloatMatrix::IndexSet indexes;
-    for(Fuzi::NamedResults::const_iterator i = results["dx"].begin();
-            i != results["dx"].end(); ++i)
-    {
-        indexes.push_back(i->first);
-        for(Fuzi::NamedResults::const_iterator j = results["x"].begin();
-                j != results["x"].end(); ++j)
-        {
-            indexes.push_back(j->first);
-            inferenceMatrix.At(indexes) = std::min(
-                    i->second,
-                    j->second);
-            indexes.pop_back();
-        }
-        indexes.pop_back();
-    }
-
-    return inferenceMatrix;
-}
-
-static Fuzi::NamedResults composeResults(
-        Rules const& rules, 
-        FloatMatrix const& inferenceMatrix)
-{
-    Fuzi::NamedResults ret;
-
-    for(Rules::iterator i = rules.begin(); i != rules.end(); ++i)
-    {
-        for(Rules::iterator j = i->second.begin(); j != i->second.end(); ++j)
-        {
-            ret[(*j->second).c_str()] =
-                std::max(
-                        ret[(*j->second).c_str()],
-                        *inferenceMatrix
-                        .Of(i->first.c_str())
-                        .Of(j->first.c_str()));
-        }
-    }
-
-    return ret;
-}
-
 int main(
         int argc,
         char* argv[])
@@ -231,7 +187,7 @@ int main(
     printResults(results);
 
     Rules rules;
-    //        dx        x 
+    //        dx        x         y
     rules.For("NE").For("NE").Set("PO");
     rules.For("NE").For("ZE").Set("ZE");
     rules.For("NE").For("PO").Set("ZE");
@@ -264,7 +220,9 @@ int main(
     printRulesMatrix(results, rules);
     printf("\n");
 
-    FloatMatrix inferenceMatrix = computeInferenceMatrix(results);
+    Inference infComputer;
+    infComputer << results["dx"] << results["x"];
+    FloatMatrix const& inferenceMatrix = *infComputer;
     printInferenceMatrix(results, inferenceMatrix);
 
 #ifdef TESTS
@@ -281,7 +239,8 @@ int main(
     }
 #endif
 
-    Fuzi::NamedResults composed = composeResults(rules, inferenceMatrix);
+    
+    Fuzi::NamedResults composed = CompositionProblem(rules)(inferenceMatrix);
     printf("\ny:\n");
     printNamedResults(composed);
     printf("\n");

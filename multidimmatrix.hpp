@@ -1,5 +1,5 @@
-#ifndef MULTIDIMARRAY_HXX
-#define MULTIDIMARRAY_HXX
+#ifndef MULTIDIMMATRIX_HXX
+#define MULTIDIMMATRIX_HXX
 
 #include <assert.h>
 #include <map>
@@ -7,10 +7,10 @@
 #include <deque>
 
 template<typename T>
-class MultiDimArray
+class MultiDimMatrix
 {
     typedef T value_type;
-    typedef MultiDimArray<value_type> my_type;
+    typedef MultiDimMatrix<value_type> my_type;
     typedef std::map<std::string, my_type> dimension_type;
     typedef typename dimension_type::value_type iterator_type;
     typedef typename std::map<std::string, my_type>::const_iterator dimension_type_const_iterator;
@@ -19,7 +19,7 @@ class MultiDimArray
 public:
     typedef std::deque<std::string> IndexSet;
 
-    MultiDimArray() {}
+    MultiDimMatrix() {}
 
     my_type& For(std::string const& name)
     {
@@ -144,7 +144,7 @@ public:
     }
 };
 
-typedef MultiDimArray<std::string> Rules;
-typedef MultiDimArray<float> FloatMatrix;
+typedef MultiDimMatrix<std::string> Rules;
+typedef MultiDimMatrix<float> FloatMatrix;
 
 #endif
