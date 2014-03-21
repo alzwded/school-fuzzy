@@ -2,7 +2,6 @@
 #include "fuzi.hxx"
 #include "fuzification.hxx"
 #include "multidimmatrix.hpp"
-#include "utilities.h"
 
 namespace Utilities {
 
