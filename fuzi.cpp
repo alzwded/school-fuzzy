@@ -12,7 +12,7 @@
 #include "functions.hpp"
 #include "fuzi.hxx"
 #include "fuzification.hxx"
-#include "multidimarray.hxx"
+#include "multidimarray.hpp"
 
 // main logic
 
