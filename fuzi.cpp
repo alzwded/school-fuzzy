@@ -1,7 +1,6 @@
 // Author: Vlad Mesco
 // Date: Wed Mar 12 21:46:09 EET 2014
-// Description: First fuzzy logic assignment (implement 4 functions,
-//              compute two instances for a pair of values)
+// Description: Fuzzy logic lab assignment
 
 #include <assert.h>
 #include <algorithm>
@@ -13,10 +12,11 @@
 #include "functions.hpp"
 #include "fuzi.hxx"
 #include "fuzification.hxx"
+#include "multidimarray.hxx"
 
 // main logic
 
-NamedFuzis InitFuzi()
+static NamedFuzis InitFuzi()
 {
     FuziBuilder xBuilder;
     LeftSaturationDefinition
@@ -73,14 +73,17 @@ static void printResults(FuzifiedValues const& values)
     }
 }
 
-#ifdef TESTS
 static void printNamedResults(Fuzi::NamedResults const& r)
 {
-    for(size_t i = 0; i < r.size(); ++i)
-        printf("%s = %-7.2f", r[i].first.c_str(), r[i].second);
+    for(Fuzi::NamedResults::const_iterator i = r.begin();
+            i != r.end(); ++i)
+    {
+        printf("%s = %-7.2f", i->first.c_str(), i->second);
+    }
 }
 
-void test1()
+#ifdef TESTS
+static void test1()
 {
     NamedFuzis fuzis = InitFuzi();
 
@@ -101,6 +104,114 @@ void test1()
 }
 #endif
 
+static void printRulesMatrix(
+        FuzifiedValues& results,
+        Rules const& mat)
+{
+    FloatMatrix::IndexSet indexes;
+
+    printf("dx\\x");
+    for(Fuzi::NamedResults::const_iterator j = results["x"].begin();
+            j != results["x"].end(); ++j)
+    {
+        printf("%7s", j->first.c_str());
+    }
+    printf("\n");
+
+    for(Fuzi::NamedResults::const_iterator i = results["dx"].begin();
+            i != results["dx"].end(); ++i)
+    {
+        printf("%-3s ", i->first.c_str());
+        indexes.push_back(i->first);
+        for(Fuzi::NamedResults::const_iterator j = results["x"].begin();
+                j != results["x"].end(); ++j)
+        {
+            indexes.push_back(j->first);
+            printf("%7s", mat.At(indexes).c_str());
+            indexes.pop_back();
+        }
+        indexes.pop_back();
+        printf("\n");
+    }
+}
+
+static void printInferenceMatrix(
+        FuzifiedValues& results,
+        FloatMatrix const& mat)
+{
+    FloatMatrix::IndexSet indexes;
+
+    printf("dx\\x");
+    for(Fuzi::NamedResults::const_iterator j = results["x"].begin();
+            j != results["x"].end(); ++j)
+    {
+        printf("%7s", j->first.c_str());
+    }
+    printf("\n");
+
+    for(Fuzi::NamedResults::const_iterator i = results["dx"].begin();
+            i != results["dx"].end(); ++i)
+    {
+        printf("%-3s ", i->first.c_str());
+        indexes.push_back(i->first);
+        for(Fuzi::NamedResults::const_iterator j = results["x"].begin();
+                j != results["x"].end(); ++j)
+        {
+            indexes.push_back(j->first);
+            printf("%7.2f", mat.At(indexes));
+            indexes.pop_back();
+        }
+        indexes.pop_back();
+        printf("\n");
+    }
+}
+
+static FloatMatrix computeInferenceMatrix(FuzifiedValues& results)
+{
+    FloatMatrix inferenceMatrix;
+
+    FloatMatrix::IndexSet indexes;
+    for(Fuzi::NamedResults::const_iterator i = results["dx"].begin();
+            i != results["dx"].end(); ++i)
+    {
+        indexes.push_back(i->first);
+        for(Fuzi::NamedResults::const_iterator j = results["x"].begin();
+                j != results["x"].end(); ++j)
+        {
+            indexes.push_back(j->first);
+            inferenceMatrix.At(indexes) = std::min(
+                    i->second,
+                    j->second);
+            indexes.pop_back();
+        }
+        indexes.pop_back();
+    }
+
+    return inferenceMatrix;
+}
+
+static Fuzi::NamedResults composeResults(
+        Rules const& rules, 
+        FloatMatrix const& inferenceMatrix)
+{
+    Fuzi::NamedResults ret;
+
+    for(Rules::iterator i = rules.begin(); i != rules.end(); ++i)
+    {
+        for(Rules::iterator j = i->second.begin(); j != i->second.end(); ++j)
+        {
+            ret[(*j->second).c_str()] =
+                std::max(
+                        ret[(*j->second).c_str()],
+                        *inferenceMatrix
+                        .Of(i->first.c_str())
+                        .Of(j->first.c_str()));
+        }
+    }
+
+    return ret;
+}
+
 int main(
         int argc,
         char* argv[])
@@ -118,6 +229,62 @@ int main(
 
     FuzifiedValues results = FuzificationProblem(fuzis)(input);
     printResults(results);
+
+    Rules rules;
+    //        dx        x 
+    rules.For("NE").For("NE").Set("PO");
+    rules.For("NE").For("ZE").Set("ZE");
+    rules.For("NE").For("PO").Set("ZE");
+    rules.For("ZE").For("NE").Set("PO");
+    rules.For("ZE").For("ZE").Set("ZE");
+    rules.For("ZE").For("PO").Set("NE");
+    rules.For("PO").For("NE").Set("ZE");
+    rules.For("PO").For("ZE").Set("NE");
+    rules.For("PO").For("PO").Set("NE");
+
+#ifdef TESTS
+    printf("%s\n", (*rules["NE"]["NE"]).c_str());
+    Rules::IndexSet indexes;
+    indexes.push_back("PO");
+    indexes.push_back("NE");
+    printf("%s\n", rules.At(indexes).c_str());
+#endif
+
+#ifdef TESTS
+    FloatMatrix testInferenceMatrix;
+    testInferenceMatrix.For("ZE").For("ZE").Set(std::min(results["x"]["ZE"], results["dx"]["ZE"]));
+    printf("%7.2f\n", *testInferenceMatrix["ZE"]["ZE"]);
+
+    testInferenceMatrix.At(indexes) = std::min(results["x"]["PO"], results["dx"]["NE"]);
+    printf("%7.2f\n", testInferenceMatrix.Of("PO").Of("NE").Get());
+    printf("%7.2f\n", testInferenceMatrix.At(indexes));
+#endif
+
+    printf("\n");
+    printRulesMatrix(results, rules);
+    printf("\n");
+
+    FloatMatrix inferenceMatrix = computeInferenceMatrix(results);
+    printInferenceMatrix(results, inferenceMatrix);
+
+#ifdef TESTS
+    printf("\ndx*x\n");
+    for(Rules::iterator i = rules.begin(); i != rules.end(); ++i)
+    {
+        for(Rules::iterator j = i->second.begin(); j != i->second.end(); ++j)
+        {
+            printf("%sx%s: %s\n",
+                    i->first.c_str(),
+                    j->first.c_str(),
+                    (*j->second).c_str());
+        }
+    }
+#endif
+
+    Fuzi::NamedResults composed = composeResults(rules, inferenceMatrix);
+    printf("\ny:\n");
+    printNamedResults(composed);
+    printf("\n");
 
     return 0;
 }
