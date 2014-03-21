@@ -21,15 +21,13 @@ public:
 
     FloatMatrix const& operator*()
     {
-        FloatMatrix::IndexSet indexes;
         std::deque<float> vals;
-        Compute(mat_, indexes, vals, funcs_.begin());
+        Compute(mat_, vals, funcs_.begin());
         return mat_;
     }
 private:
     void Compute(
             FloatMatrix& mat,
-            FloatMatrix::IndexSet& indexes,
             std::deque<float>& vals,
             funcs_t::iterator i)
     {
@@ -44,11 +42,9 @@ private:
         for(Fuzi::NamedResults::const_iterator j = r.begin();
                 j != r.end(); ++j)
         {
-            indexes.push_back(j->first);
             vals.push_back(j->second);
-            Compute(mat.For(j->first), indexes, vals, i + 1);
+            Compute(mat.For(j->first), vals, i + 1);
             vals.pop_back();
-            indexes.pop_back();
         }
     }
 };
