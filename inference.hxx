@@ -1,3 +1,6 @@
+// Author: Vlad Mesco
+// Date: Sat Mar 22 11:17:10 EET 2014
+// Description: Infer results matrix
 #ifndef INFERENCE_HXX
 #define INFERENCE_HXX
 

@@ -98,6 +98,14 @@ void clean_main()
     printf("\ny:\n");
     Utilities::printNamedResults(composed);
     printf("\n");
+
+    LeftSaturationDefinition yNEDefinition = { -1.25f, -.75f };
+    TriangleDefinition yZEDefinition = { -.5f, 0.f, .5f };
+    RightSaturationDefinition yPODefinition = { .75f, 1.24f };
+    Fuzi y(FuziBuilder()
+            << NamedVariable("NE", NewFunction(yNEDefinition))
+            << NamedVariable("ZE", NewFunction(yZEDefinition))
+            << NamedVariable("PO", NewFunction(yPODefinition)));
 }
 
 #ifdef TESTS

@@ -1,3 +1,6 @@
+// Author: Vlad Mesco
+// Date: Sat Mar 22 11:17:10 EET 2014
+// Description: tests...
 static void test1()
 {
     NamedFuzis fuzis = InitFuzi();

@@ -1,3 +1,6 @@
+// Author: Vlad Mesco
+// Date: Sat Mar 22 11:17:10 EET 2014
+// Description: print utilities
 #include <cstdio>
 #include "fuzi.hxx"
 #include "fuzification.hxx"

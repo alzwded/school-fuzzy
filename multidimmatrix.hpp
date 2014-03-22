@@ -89,23 +89,23 @@ public:
             : i_(i)
         {}
 
-        iterator_type& operator*()
+        iterator_type& operator*() const
         {
             return *i_;
         }
 
-        iterator_type* operator->()
+        iterator_type* operator->() const
         {
             return &*i_;
         }
 
-        iterator operator++(int)
+        iterator operator++(int) const
         {
             iterator ret(i_++);
             return ret;
         }
 
-        iterator operator++()
+        iterator operator++() const
         {
             ++i_;
             return *this;
@@ -138,7 +138,7 @@ public:
         return const_iterator(const_cast<my_type*>(this)->subrules_.end());
     }
 
-    bool empty()
+    bool empty() const
     {
         return subrules_.empty();
     }
