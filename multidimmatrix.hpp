@@ -140,14 +140,6 @@ public:
             return *this;
         }
 
-        iterator operator+(size_t const amount) const
-        {
-            switch(amount) {
-            case 0: return *this;
-            default: return iterator(i_ + amount);
-            }
-        }
-
         bool operator!=(iterator const& other) const
         {
             return i_ != other.i_;
@@ -156,11 +148,6 @@ public:
         bool operator==(iterator const& other) const
         {
             return i_ == other.i_;
-        }
-
-        bool operator<(iterator const& other) const
-        {
-            return i_ < other.i_;
         }
     };
     typedef iterator const const_iterator;
