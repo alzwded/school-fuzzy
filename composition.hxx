@@ -37,7 +37,7 @@ private:
         if(rules.empty()) {
             Fuzi::NamedResults::iterator i = ret.find(*rules);
             if(i == ret.end()) {
-                ret[*rules] = *inferenceMatrix;
+                ret.insert(std::make_pair(*rules, *inferenceMatrix));
             } else {
                 ret[*rules] = std::max(ret[*rules], *inferenceMatrix);
             }

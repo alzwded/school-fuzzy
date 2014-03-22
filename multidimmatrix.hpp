@@ -9,14 +9,14 @@
 template<typename T>
 class MultiDimMatrix
 {
-    typedef T value_type;
-    typedef MultiDimMatrix<value_type> my_type;
+    typedef MultiDimMatrix<T> my_type;
     typedef std::map<std::string, my_type> dimension_type;
-    typedef typename dimension_type::value_type iterator_type;
     typedef typename std::map<std::string, my_type>::const_iterator dimension_type_const_iterator;
-    value_type val_;
+
+    T val_;
     dimension_type subrules_;
 public:
+    typedef typename dimension_type::value_type value_type;
     typedef std::deque<std::string> IndexSet;
 
     MultiDimMatrix() {}
@@ -26,7 +26,7 @@ public:
         return subrules_[name];
     }
 
-    void Set(value_type const& val)
+    void Set(T const& val)
     {
         val_ = val;
     }
@@ -48,17 +48,22 @@ public:
         return i->second;
     }
 
-    value_type const& Get() const
+    T const& Get() const
     {
         return val_;
     }
 
-    value_type const& operator*() const
+    T& operator*()
+    {
+        return val_;
+    }
+
+    T const& operator*() const
     {
         return Get();
     }
 
-    value_type& At(IndexSet const& indexes)
+    T& At(IndexSet const& indexes)
     {
         my_type* self = this;
         for(IndexSet::const_iterator i = indexes.begin();
@@ -69,7 +74,7 @@ public:
         return self->val_;
     }
 
-    value_type const& At(IndexSet const& indexes) const
+    T const& At(IndexSet const& indexes) const
     {
         my_type const* self = this;
         for(IndexSet::const_iterator i = indexes.begin();
@@ -85,16 +90,40 @@ public:
     private:
         mutable typename dimension_type::iterator i_;
     public:
-        iterator(typename dimension_type::iterator const& i)
+        iterator()
+            : i_()
+        {}
+
+        explicit iterator(typename dimension_type::iterator const& i)
             : i_(i)
         {}
 
-        iterator_type& operator*() const
+        iterator(iterator const& other)
+            : i_(other.i_)
+        {}
+
+        iterator& operator=(iterator const& other)
+        {
+            i_ = other.i_;
+            return *this;
+        }
+
+        value_type& operator*()
         {
             return *i_;
         }
 
-        iterator_type* operator->() const
+        value_type const& operator*() const
+        {
+            return *i_;
+        }
+
+        value_type* operator->()
+        {
+            return &*i_;
+        }
+
+        value_type const* operator->() const
         {
             return &*i_;
         }
@@ -111,9 +140,27 @@ public:
             return *this;
         }
 
+        iterator operator+(size_t const amount) const
+        {
+            switch(amount) {
+            case 0: return *this;
+            default: return iterator(i_ + amount);
+            }
+        }
+
         bool operator!=(iterator const& other) const
         {
             return i_ != other.i_;
+        }
+
+        bool operator==(iterator const& other) const
+        {
+            return i_ == other.i_;
+        }
+
+        bool operator<(iterator const& other) const
+        {
+            return i_ < other.i_;
         }
     };
     typedef iterator const const_iterator;
